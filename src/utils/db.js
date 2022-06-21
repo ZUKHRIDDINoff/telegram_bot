@@ -13,7 +13,7 @@ const sequelize = new Sequelize({
 export default async () => {
     try {
         await sequelize.authenticate()
-        console.log('Database connected!');
+        // console.log('Database connected!');
     
         await models({ sequelize })
 

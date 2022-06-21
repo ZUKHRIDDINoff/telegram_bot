@@ -3,16 +3,15 @@ import { Bot } from "grammy"
 import './config.js'
 import database from './utils/db.js'
 
-const token = '5197589042:AAF8eC7jpT15ayQb7-WLwBpjfmI1LJ9JKeM'
+const token = process.env.BOT_TOKEN
 const bot = new Bot(token);
-const PORT = process.env.PORT || 4000
+const PORT = process.env.PORT
 const app = express()
-
 
 
 bot.command("start", async (ctx) => {
     ctx.reply(`Welcome to testing bot!\n
-    You can control me by sending these commands:\n
+    You can control this bot by sending these commands:\n
     \/photo  -  get random photo\n
     \/users_data  -  get all users data from postgres database using sequelize\n
     \/send write something  -  send your message to all users\n
@@ -50,7 +49,9 @@ bot.command("photo", async(ctx) => {
 bot.command("users_data", async(ctx) => {
     const db = await database()    
     const users = await db.models.User.findAll()
-    ctx.reply(JSON.stringify(users,null,2))
+    ctx.reply(JSON.stringify(users,null,2),{
+        reply_to_message_id: ctx.msg.message_id
+    })
 });
 
 bot.command("send", async(ctx) => {
